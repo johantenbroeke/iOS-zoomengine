@@ -17,6 +17,9 @@
         marker.backgroundColor = [UIColor whiteColor];
         marker.frame = CGRectMake(10, 10, 10, 10);
         [self addSubview:marker];
+        
+        [self removeConstraints:self.constraints];
+
     }
     return self;
 }

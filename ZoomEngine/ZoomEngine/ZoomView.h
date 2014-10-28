@@ -11,5 +11,20 @@
 @interface ZoomView : UIView
 
 -(void)addZoomTarget:(UIView*)view;
++(CGAffineTransform)makeTransformWithXscale:(CGFloat)xScale
+                                  andYScale:(CGFloat)yScale
+                                andRotation:(CGFloat)theta
+                            andXtranslation:(CGFloat)tx
+                            andYtranslation:(CGFloat)ty;
+
+
+//helpers
+- (CGFloat) xscale;
+- (CGFloat) yscale;
+- (CGFloat) rotation;
+- (CGFloat) tx;
+- (CGFloat) ty;
+
+-(void)logProps;
 
 @end

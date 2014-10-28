@@ -12,15 +12,21 @@
 
 @interface ViewController ()
 
+
+
 @end
 
-@implementation ViewController
+@implementation ViewController{
+
+    ZoomView *v;
+    
+}
 
 - (void)viewDidLoad {
     
     [super viewDidLoad];
     
-    ZoomView *v = [[ZoomView alloc] init];
+    v = [[ZoomView alloc] init];
     v.frame = CGRectMake(0, 0, 400, 400);
     v.center = self.view.center;
     [self.view addSubview:v];
@@ -39,31 +45,55 @@
     
     [self.view addSubview:viewPort];
     
+    [self addTargetWithName:@"groen"
+                   andColor:[UIColor greenColor]
+                  andXscale:0.5
+                  andYScale:0.5
+                andRotation:-1
+            andXtranslation:20
+            andYtranslation:20];
+    
+    [self addTargetWithName:@"rood"
+                   andColor:[UIColor redColor]
+                  andXscale:0.2
+                  andYScale:0.2
+                andRotation:3
+            andXtranslation:45
+            andYtranslation:45];
+    
+    
+    [self addTargetWithName:@"black"
+                   andColor:[UIColor blackColor]
+                  andXscale:0.1
+                  andYScale:0.1
+                andRotation:3
+            andXtranslation:50
+            andYtranslation:50];
+    
+}
+
+-(void)addTargetWithName:(NSString*)name
+                andColor:(UIColor*)color
+               andXscale:(CGFloat)xScale
+               andYScale:(CGFloat)yScale
+             andRotation:(CGFloat)theta
+         andXtranslation:(CGFloat)tx
+         andYtranslation:(CGFloat)ty
+{
     
     ZoomTarget *view = [[ZoomTarget alloc] init];
-    [view setBackgroundColor:[UIColor greenColor]];
+    [view setBackgroundColor:color];
     view.frame = CGRectMake(0, 0, 400, 400);
     
-    view.transform = CGAffineTransformConcat(view.transform, CGAffineTransformMakeTranslation(20, 20));
-    view.transform = CGAffineTransformConcat(view.transform, CGAffineTransformMakeScale(0.5, 0.5));
-    view.transform = CGAffineTransformConcat(view.transform, CGAffineTransformMakeRotation(-1));
+    CGAffineTransform trans = [ZoomView makeTransformWithXscale:xScale
+                                                      andYScale:yScale
+                                                    andRotation:theta
+                                                andXtranslation:tx
+                                                andYtranslation:ty];
     
-    view.initialTransform = view.transform;
-    view.name = @"groen";
+    view.initialTransform = view.transform = trans;
+    view.name = name;
     [v addZoomTarget:view];
-    
-    view = [[ZoomTarget alloc] init];
-    [view setBackgroundColor:[UIColor redColor]];
-    view.frame = CGRectMake(0, 0, 400, 400);
-    
-    view.transform = CGAffineTransformConcat(view.transform, CGAffineTransformMakeTranslation(45, 45));
-    view.transform = CGAffineTransformConcat(view.transform, CGAffineTransformMakeScale(0.2, 0.2));
-    view.transform = CGAffineTransformConcat(view.transform, CGAffineTransformMakeRotation(5));
-    
-    view.initialTransform = view.transform;
-    view.name = @"rood";
-    [v addZoomTarget:view];
-    
 }
 
 - (void)didReceiveMemoryWarning {
