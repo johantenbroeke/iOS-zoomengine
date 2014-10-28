@@ -43,11 +43,11 @@
     ZoomTarget *view = [[ZoomTarget alloc] init];
     [view setBackgroundColor:[UIColor greenColor]];
     view.frame = CGRectMake(0, 0, 400, 400);
-    view.transform = CGAffineTransformMakeScale(0.5, 0.5);
-    CGAffineTransform translation = CGAffineTransformMakeTranslation(20, 20);
-    view.transform = CGAffineTransformConcat(view.transform, translation);
-    CGAffineTransform rotation = CGAffineTransformMakeRotation(-1);
-    view.transform = CGAffineTransformConcat(view.transform, rotation);
+    
+    view.transform = CGAffineTransformConcat(view.transform, CGAffineTransformMakeTranslation(20, 20));
+    view.transform = CGAffineTransformConcat(view.transform, CGAffineTransformMakeScale(0.5, 0.5));
+    view.transform = CGAffineTransformConcat(view.transform, CGAffineTransformMakeRotation(-1));
+    
     view.initialTransform = view.transform;
     view.name = @"groen";
     [v addZoomTarget:view];
@@ -55,11 +55,11 @@
     view = [[ZoomTarget alloc] init];
     [view setBackgroundColor:[UIColor redColor]];
     view.frame = CGRectMake(0, 0, 400, 400);
-    view.transform = CGAffineTransformMakeScale(0.2, 0.2);
-    translation = CGAffineTransformMakeTranslation(45, 45);
-    view.transform = CGAffineTransformConcat(view.transform, translation);
-    rotation = CGAffineTransformMakeRotation(5);
-    view.transform = CGAffineTransformConcat(view.transform, rotation);
+    
+    view.transform = CGAffineTransformConcat(view.transform, CGAffineTransformMakeTranslation(45, 45));
+    view.transform = CGAffineTransformConcat(view.transform, CGAffineTransformMakeScale(0.2, 0.2));
+    view.transform = CGAffineTransformConcat(view.transform, CGAffineTransformMakeRotation(5));
+    
     view.initialTransform = view.transform;
     view.name = @"rood";
     [v addZoomTarget:view];
