@@ -75,28 +75,30 @@
 {
     ZoomTarget *t = (ZoomTarget*)r.view;
     
-    if([t.name isEqualToString:@"groen"]){
-        
-        CGAffineTransform transform = CGAffineTransformMakeTranslation(100, 100);
-        [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^(void) {
-                             self.transform = transform;
-                         }
-                         completion:^(BOOL finished){
-                             self.transform = transform;
-                         }];
-        
-    }else{
+//    if([t.name isEqualToString:@"groen"]){
+//        
+//        CGAffineTransform transform = CGAffineTransformMakeTranslation(100, 100);
+//        [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+//                         animations:^(void) {
+//                             self.transform = transform;
+//                         }
+//                         completion:^(BOOL finished){
+//                             self.transform = transform;
+//                         }];
+//        
+//    }else{
     
         CGAffineTransform transform = CGAffineTransformInvert(t.transform);
         [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                          animations:^(void) {
                              self.transform = transform;
+                             [self layoutIfNeeded];
+                             [self.superview layoutIfNeeded];
                          }
                          completion:^(BOOL finished){
-                             self.transform = transform;
+                             //self.transform = CGAffineTransformIdentity;
                          }];
-    }
+//    }
 }
 
 @end
