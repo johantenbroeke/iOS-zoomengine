@@ -19,6 +19,7 @@
         [self addSubview:marker];
         
         [self removeConstraints:self.constraints];
+        self.translatesAutoresizingMaskIntoConstraints = YES;
 
     }
     return self;

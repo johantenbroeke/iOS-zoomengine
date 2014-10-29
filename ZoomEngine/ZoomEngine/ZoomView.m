@@ -95,6 +95,7 @@
         self.zoomedOutTransform = self.transform;
         
         [self removeConstraints:self.constraints];
+        self.translatesAutoresizingMaskIntoConstraints = YES;
         self.zoomOutBeforeZoomingIn = NO;
         
     }
@@ -155,14 +156,22 @@
         
         return;
     }
+    
+    
 
     CGAffineTransform transform = CGAffineTransformInvert(t.transform);
-    [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+    [UIView animateWithDuration:3.0 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                      animations:^(void) {
+                         
+//                         CALayer *presLayer = (CALayer *)self.layer.presentationLayer;
+//                         self.layer.position = [presLayer position];
+//                         [self.layer removeAllAnimations];
                          self.transform = transform;
                      }
                      completion:^(BOOL finished){
-                         //self.transform = CGAffineTransformIdentity;
+
+
+                         
                          [self logProps];
                      }];
 
