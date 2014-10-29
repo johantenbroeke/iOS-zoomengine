@@ -6,25 +6,20 @@
 //  Copyright (c) 2014 Fullscreen. All rights reserved.
 //
 
+#define SHOW_ORIENTATION_MARKER YES
+#define SHOW_DEBUG_VIEWPORT YES
+#define LOG_ZOOM_PROPERTIES YES
+
 #import <UIKit/UIKit.h>
 
 @interface ZoomView : UIView
 
--(void)addZoomTarget:(UIView*)view;
-+(CGAffineTransform)makeTransformWithXscale:(CGFloat)xScale
-                                  andYScale:(CGFloat)yScale
-                                andRotation:(CGFloat)theta
-                            andXtranslation:(CGFloat)tx
-                            andYtranslation:(CGFloat)ty;
-
-
-//helpers
-- (CGFloat) xscale;
-- (CGFloat) yscale;
-- (CGFloat) rotation;
-- (CGFloat) tx;
-- (CGFloat) ty;
-
--(void)logProps;
+-(void)addZoomTargetWithName:(NSString*)name
+                    andColor:(UIColor*)color
+                   andXscale:(CGFloat)xScale
+                   andYScale:(CGFloat)yScale
+                 andRotation:(CGFloat)theta
+             andXtranslation:(CGFloat)tx
+             andYtranslation:(CGFloat)ty;
 
 @end

@@ -13,15 +13,14 @@
 
 @property (nonatomic,strong) NSMutableArray *targets;
 @property (nonatomic,assign) CGAffineTransform zoomedOutTransform;
-@property (nonatomic,assign) CGFloat zoomedOutHeight;
-
-@property (nonatomic,assign) BOOL zoomOutBeforeZoomingIn;
 
 @end
 
 @implementation ZoomView
 
-+(CGAffineTransform)makeTransformWithXscale:(CGFloat)xScale
+
+//helpers
+-(CGAffineTransform)makeTransformWithXscale:(CGFloat)xScale
                               andYScale:(CGFloat)yScale
                             andRotation:(CGFloat)theta
                         andXtranslation:(CGFloat)tx
@@ -40,8 +39,6 @@
     return transform;
 }
 
-
-//helpers
 - (CGFloat) xscale
 {
     CGAffineTransform t = self.transform;
@@ -72,54 +69,83 @@
     return t.ty;
 }
 
--(void)logProps
+-(void)logZoomProperties
 {
-    NSLog(@"\n\nprops\n-------\nxscale : %f \nyscale : %f \nrotation : %f \ntransX : %f \ntransY : %f",[self xscale],[self yscale],[self rotation],[self tx],[self ty]);
+    NSLog(@"\n\nZoomView props:\n-------\nxscale : %f \nyscale : %f \nrotation : %f \ntransX : %f \ntransY : %f",
+          [self xscale],
+          [self yscale],
+          [self rotation],
+          [self tx],
+          [self ty]);
 }
 
 -(id)init
 {
     self = [super init];
     if(self){
+        
         [self setBackgroundColor:[UIColor lightGrayColor]];
         self.targets = [[NSMutableArray alloc] init];
         
-        UIView *marker = [[UIView alloc] init];
-        marker.backgroundColor = [UIColor whiteColor];
-        marker.frame = CGRectMake(10, 10, 10, 10);
-        [self addSubview:marker];
+        if(SHOW_ORIENTATION_MARKER){
+            UIView *marker = [[UIView alloc] init];
+            marker.backgroundColor = [UIColor whiteColor];
+            marker.frame = CGRectMake(10, 10, 10, 10);
+            [self addSubview:marker];
+        }
         
         UITapGestureRecognizer *r = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(zoomOut:)];
         [self addGestureRecognizer:r];
         
         self.zoomedOutTransform = self.transform;
         
-        [self removeConstraints:self.constraints];
-        self.translatesAutoresizingMaskIntoConstraints = YES;
-        self.zoomOutBeforeZoomingIn = YES;
+        if(SHOW_DEBUG_VIEWPORT){
+            [self showDebugViewport];
+        }
         
     }
     return self;
 }
 
-
--(void)setFrame:(CGRect)frame
+-(void)showDebugViewport
 {
-    [super setFrame:frame];
-    self.zoomedOutHeight = frame.size.height;
+    UIView *viewPort = [[UIView alloc] init];
+    viewPort.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
+    viewPort.center = self.center;
+    [viewPort.layer setBorderWidth:3.0];
+    [viewPort.layer setBorderColor:[[UIColor colorWithRed:0.10 green:0.45 blue:0.73 alpha:1.0] CGColor]];
+    [viewPort.layer setCornerRadius:2.0];
+    [viewPort setUserInteractionEnabled:NO];
+    [self.superview addSubview:viewPort];
 }
 
 -(void)zoomOut:(UITapGestureRecognizer*)r
 {
-    
-    [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^(void) {
-                         self.transform = self.zoomedOutTransform;
-                     }
-                     completion:^(BOOL finished){
+    [self zoomToTransform:self.zoomedOutTransform];
+}
 
-                     }];
+-(void)addZoomTargetWithName:(NSString*)name
+                andColor:(UIColor*)color
+               andXscale:(CGFloat)xScale
+               andYScale:(CGFloat)yScale
+             andRotation:(CGFloat)theta
+         andXtranslation:(CGFloat)tx
+         andYtranslation:(CGFloat)ty
+{
     
+    ZoomTarget *view = [[ZoomTarget alloc] init];
+    [view setBackgroundColor:color];
+    view.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
+    
+    CGAffineTransform trans = [self makeTransformWithXscale:xScale
+                                                      andYScale:yScale
+                                                    andRotation:theta
+                                                andXtranslation:tx
+                                                andYtranslation:ty];
+    
+    view.transform = trans;
+    view.name = name;
+    [self addZoomTarget:view];
 }
 
 
@@ -127,53 +153,33 @@
 {
     [self.targets addObject:view];
     [self addSubview:view];
-    
     UITapGestureRecognizer *r = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
     [view addGestureRecognizer:r];
-    
 }
 
 -(void)tapped:(UITapGestureRecognizer*)r
 {
     ZoomTarget *t = (ZoomTarget*)r.view;
-    
-    if(self.zoomOutBeforeZoomingIn){
-        
-        [UIView animateWithDuration:0.7 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^(void) {
-                             self.transform = self.zoomedOutTransform;
-                         }
-                         completion:^(BOOL finished){
-                             CGAffineTransform transform = CGAffineTransformInvert(t.transform);
-                             [UIView animateWithDuration:0.4 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
-                                              animations:^(void) {
-                                                  self.transform = transform;
-                                              }
-                                              completion:^(BOOL finished){
-                                                  //self.transform = CGAffineTransformIdentity;
-                                              }];
-                         }];
-        
+    CGAffineTransform transform = CGAffineTransformInvert(t.transform);
+    [self zoomToTransform:transform];
+}
 
-    }else{
-        
-        [CATransaction begin];
-        CGAffineTransform transform = CGAffineTransformInvert(t.transform);
-        CABasicAnimation *zoomAnim = [CABasicAnimation animationWithKeyPath:@"transform"];
-        zoomAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-        zoomAnim.duration = 0.5;
-        zoomAnim.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeAffineTransform(self.transform)];
-        zoomAnim.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeAffineTransform(transform)];
-        [CATransaction setCompletionBlock:^{
-            NSLog(@"done!");
-        }];
-        [self.layer addAnimation:zoomAnim forKey:nil];
-        [CATransaction commit];
-        self.transform = transform;
-
-    }
-
-
+-(void)zoomToTransform:(CGAffineTransform)transform
+{
+    [CATransaction begin];
+    CABasicAnimation *zoomAnim = [CABasicAnimation animationWithKeyPath:@"transform"];
+    zoomAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    zoomAnim.duration = 0.5;
+    zoomAnim.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeAffineTransform(self.transform)];
+    zoomAnim.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeAffineTransform(transform)];
+    [CATransaction setCompletionBlock:^{
+        if(LOG_ZOOM_PROPERTIES){
+            [self logZoomProperties];
+        }
+    }];
+    [self.layer addAnimation:zoomAnim forKey:nil];
+    [CATransaction commit];
+    self.transform = transform;
 }
 
 @end

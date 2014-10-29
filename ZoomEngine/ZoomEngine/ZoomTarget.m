@@ -7,20 +7,21 @@
 //
 
 #import "ZoomTarget.h"
+#import "ZoomView.h"
 
 @implementation ZoomTarget
 
 -(id)init{
     self = [super init];
     if(self){
-        UIView *marker = [[UIView alloc] init];
-        marker.backgroundColor = [UIColor whiteColor];
-        marker.frame = CGRectMake(10, 10, 10, 10);
-        [self addSubview:marker];
         
-        [self removeConstraints:self.constraints];
-        self.translatesAutoresizingMaskIntoConstraints = YES;
-
+        if(SHOW_ORIENTATION_MARKER){
+            UIView *marker = [[UIView alloc] init];
+            marker.backgroundColor = [UIColor whiteColor];
+            marker.frame = CGRectMake(10, 10, 10, 10);
+            [self addSubview:marker];
+        }
+        
     }
     return self;
 }

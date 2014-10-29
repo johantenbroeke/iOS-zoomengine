@@ -10,7 +10,6 @@
 
 @interface ZoomTarget : UIView
 
-@property (nonatomic, assign) CGAffineTransform initialTransform;
 @property (nonatomic, strong) NSString *name;
 
 @end
