@@ -96,7 +96,7 @@
         
         [self removeConstraints:self.constraints];
         self.translatesAutoresizingMaskIntoConstraints = YES;
-        self.zoomOutBeforeZoomingIn = NO;
+        self.zoomOutBeforeZoomingIn = YES;
         
     }
     return self;
@@ -154,26 +154,25 @@
                                               }];
                          }];
         
-        return;
+
+    }else{
+        
+        [CATransaction begin];
+        CGAffineTransform transform = CGAffineTransformInvert(t.transform);
+        CABasicAnimation *zoomAnim = [CABasicAnimation animationWithKeyPath:@"transform"];
+        zoomAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        zoomAnim.duration = 0.5;
+        zoomAnim.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeAffineTransform(self.transform)];
+        zoomAnim.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeAffineTransform(transform)];
+        [CATransaction setCompletionBlock:^{
+            NSLog(@"done!");
+        }];
+        [self.layer addAnimation:zoomAnim forKey:nil];
+        [CATransaction commit];
+        self.transform = transform;
+
     }
-    
-    
 
-    CGAffineTransform transform = CGAffineTransformInvert(t.transform);
-    [UIView animateWithDuration:3.0 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^(void) {
-                         
-//                         CALayer *presLayer = (CALayer *)self.layer.presentationLayer;
-//                         self.layer.position = [presLayer position];
-//                         [self.layer removeAllAnimations];
-                         self.transform = transform;
-                     }
-                     completion:^(BOOL finished){
-
-
-                         
-                         [self logProps];
-                     }];
 
 }
 
