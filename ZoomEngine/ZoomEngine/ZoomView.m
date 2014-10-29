@@ -98,14 +98,18 @@
         [self addGestureRecognizer:r];
         
         self.zoomedOutTransform = self.transform;
-        
-        if(SHOW_DEBUG_VIEWPORT){
-            [self showDebugViewport];
-        }
-        
+
     }
     return self;
 }
+
+-(void)didMoveToSuperview
+{
+    if(SHOW_DEBUG_VIEWPORT){
+        [self showDebugViewport];
+    }
+}
+
 
 -(void)showDebugViewport
 {
