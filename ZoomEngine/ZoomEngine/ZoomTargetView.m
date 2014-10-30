@@ -6,10 +6,10 @@
 //  Copyright (c) 2014 Fullscreen. All rights reserved.
 //
 
-#import "ZoomTarget.h"
+#import "ZoomTargetView.h"
 #import "ZoomView.h"
 
-@implementation ZoomTarget
+@implementation ZoomTargetView
 
 -(id)init{
     self = [super init];

@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 #import "ZoomView.h"
-#import "ZoomTarget.h"
+#import "ZoomTargetView.h"
 #import "ZoomTargetViewController.h"
 
 @interface ViewController ()
@@ -70,6 +70,12 @@
     [button1 addTarget:self action:@selector(toRed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button1];
     
+    UIButton *button2 = [[UIButton alloc] initWithFrame:CGRectMake(150, 30, 100, 25)];
+    button2.backgroundColor = [UIColor lightGrayColor];
+    [button2 setTitle:@"remove" forState:UIControlStateNormal];
+    [button2 addTarget:self action:@selector(remove:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:button2];
+    
 }
 
 -(void)zoomView:(ZoomView *)zoomView didZoomToTargteNamed:(NSString *)name{
@@ -88,9 +94,13 @@
     NSLog(@"did zoom to root");
 }
 
--(void)toRed:(UIButton*)button
-{
+-(void)toRed:(UIButton*)button{
     [self.zoomView zoomToTargetWithName:@"red"];
+}
+
+-(void)remove:(UIButton*)button{
+    [self.zoomView removeFromSuperview];
+    self.zoomView = nil;
 }
 
 - (void)didReceiveMemoryWarning {

@@ -7,7 +7,7 @@
 //
 
 #import "ZoomView.h"
-#import "ZoomTarget.h"
+#import "ZoomTargetView.h"
 #import "ZoomTargetViewController.h"
 
 @interface ZoomView ()
@@ -146,7 +146,7 @@
     andContentViewController:(ZoomTargetViewController*)viewController
 {
     
-    ZoomTarget *view = [[ZoomTarget alloc] init];
+    ZoomTargetView *view = [[ZoomTargetView alloc] init];
     [view setBackgroundColor:color];
     view.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
     
@@ -162,6 +162,7 @@
     view.name = name;
     view.contentViewController = viewController;
     view.delegate = viewController;
+    viewController.zoomTargetView = view;
     [view.delegate zoomTargetDidLoad:view];
     [self addZoomTarget:view];
 }
@@ -174,12 +175,12 @@
     }
     if(self.currentZoomTargetName != nil){
         self.previousZoomTargetName = self.currentZoomTargetName;
-        ZoomTarget *t = (ZoomTarget*)self.targets[self.previousZoomTargetName];
+        ZoomTargetView *t = (ZoomTargetView*)self.targets[self.previousZoomTargetName];
         [t.delegate zoomTargetWillLoseFocus:t];
     }
     self.currentZoomTargetName = name;
     [self.delegate zoomView:self willZoomToTargteNamed:name];
-    ZoomTarget *t = (ZoomTarget*)self.targets[name];
+    ZoomTargetView *t = (ZoomTargetView*)self.targets[name];
     [t.delegate zoomTargetWillReceiveFocus:t];
     if(t != nil){
         CGAffineTransform transform = CGAffineTransformInvert(t.transform);
@@ -188,7 +189,7 @@
 }
 
 
--(void)addZoomTarget:(ZoomTarget*)view
+-(void)addZoomTarget:(ZoomTargetView*)view
 {
     self.targets[view.name] = view;
     [self addSubview:view];
@@ -198,7 +199,7 @@
 
 -(void)tapped:(UITapGestureRecognizer*)r
 {
-    ZoomTarget *t = (ZoomTarget*)r.view;
+    ZoomTargetView *t = (ZoomTargetView*)r.view;
     [self zoomToTargetWithName:t.name];
 }
 
@@ -219,13 +220,13 @@
         }else{
             
             if(self.previousZoomTargetName != nil){
-                ZoomTarget *tprev = (ZoomTarget*)self.targets[self.previousZoomTargetName];
+                ZoomTargetView *tprev = (ZoomTargetView*)self.targets[self.previousZoomTargetName];
                 [tprev.delegate zoomTargetDidLoseFocus:tprev];
             }
             
             [self.delegate zoomView:self didZoomToTargteNamed:self.currentZoomTargetName];
             
-            ZoomTarget *t = (ZoomTarget*)self.targets[self.currentZoomTargetName];
+            ZoomTargetView *t = (ZoomTargetView*)self.targets[self.currentZoomTargetName];
             [t.delegate zoomTargetDidReceiveFocus:t];
             
         }

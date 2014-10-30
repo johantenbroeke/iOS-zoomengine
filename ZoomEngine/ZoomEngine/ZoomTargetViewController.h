@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ZoomTarget.h"
+#import "ZoomTargetView.h"
 
 @interface ZoomTargetViewController : UIViewController <ZoomTargetDelegate>
+
+@property (nonatomic,strong) ZoomTargetView *zoomTargetView;
 
 @end

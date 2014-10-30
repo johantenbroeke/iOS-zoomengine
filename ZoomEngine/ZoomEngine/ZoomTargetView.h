@@ -8,17 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-@class ZoomTarget;
+@class ZoomTargetView;
 
 @protocol ZoomTargetDelegate
--(void)zoomTargetDidLoad:(ZoomTarget *)zoomTarget;
--(void)zoomTargetWillReceiveFocus:(ZoomTarget*)zoomTarget;
--(void)zoomTargetDidReceiveFocus:(ZoomTarget*)zoomTarget;
--(void)zoomTargetWillLoseFocus:(ZoomTarget*)zoomTarget;
--(void)zoomTargetDidLoseFocus:(ZoomTarget*)zoomTarget;
+-(void)zoomTargetDidLoad:(ZoomTargetView *)zoomTarget;
+-(void)zoomTargetWillReceiveFocus:(ZoomTargetView*)zoomTarget;
+-(void)zoomTargetDidReceiveFocus:(ZoomTargetView*)zoomTarget;
+-(void)zoomTargetWillLoseFocus:(ZoomTargetView*)zoomTarget;
+-(void)zoomTargetDidLoseFocus:(ZoomTargetView*)zoomTarget;
 @end
 
-@interface ZoomTarget : UIView
+@interface ZoomTargetView : UIView
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) UIViewController *contentViewController;
 @property (nonatomic, weak) id <ZoomTargetDelegate> delegate;

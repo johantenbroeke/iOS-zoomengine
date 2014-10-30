@@ -14,7 +14,7 @@
 		FA51535319FF9761009A7726 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA51535219FF9761009A7726 /* Images.xcassets */; };
 		FA51536219FF9762009A7726 /* ZoomEngineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA51536119FF9762009A7726 /* ZoomEngineTests.m */; };
 		FA51536D19FF97F7009A7726 /* ZoomView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA51536C19FF97F7009A7726 /* ZoomView.m */; };
-		FA51537019FF9FF5009A7726 /* ZoomTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = FA51536F19FF9FF5009A7726 /* ZoomTarget.m */; };
+		FA51537019FF9FF5009A7726 /* ZoomTargetView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA51536F19FF9FF5009A7726 /* ZoomTargetView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,8 +43,8 @@
 		FA51536119FF9762009A7726 /* ZoomEngineTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZoomEngineTests.m; sourceTree = "<group>"; };
 		FA51536B19FF97F7009A7726 /* ZoomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoomView.h; sourceTree = "<group>"; };
 		FA51536C19FF97F7009A7726 /* ZoomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoomView.m; sourceTree = "<group>"; };
-		FA51536E19FF9FF5009A7726 /* ZoomTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoomTarget.h; sourceTree = "<group>"; };
-		FA51536F19FF9FF5009A7726 /* ZoomTarget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoomTarget.m; sourceTree = "<group>"; };
+		FA51536E19FF9FF5009A7726 /* ZoomTargetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoomTargetView.h; sourceTree = "<group>"; };
+		FA51536F19FF9FF5009A7726 /* ZoomTargetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoomTargetView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,8 +92,8 @@
 				FA51534D19FF9761009A7726 /* ViewController.m */,
 				FA51536B19FF97F7009A7726 /* ZoomView.h */,
 				FA51536C19FF97F7009A7726 /* ZoomView.m */,
-				FA51536E19FF9FF5009A7726 /* ZoomTarget.h */,
-				FA51536F19FF9FF5009A7726 /* ZoomTarget.m */,
+				FA51536E19FF9FF5009A7726 /* ZoomTargetView.h */,
+				FA51536F19FF9FF5009A7726 /* ZoomTargetView.m */,
 				FA0614A51A0253CF003AD7D3 /* ZoomTargetViewController.h */,
 				FA0614A61A0253CF003AD7D3 /* ZoomTargetViewController.m */,
 				FA51535219FF9761009A7726 /* Images.xcassets */,
@@ -226,7 +226,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA51537019FF9FF5009A7726 /* ZoomTarget.m in Sources */,
+				FA51537019FF9FF5009A7726 /* ZoomTargetView.m in Sources */,
 				FA51534E19FF9761009A7726 /* ViewController.m in Sources */,
 				FA51536D19FF97F7009A7726 /* ZoomView.m in Sources */,
 				FA51534B19FF9761009A7726 /* AppDelegate.m in Sources */,

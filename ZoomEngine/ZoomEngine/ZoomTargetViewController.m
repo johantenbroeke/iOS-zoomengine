@@ -29,27 +29,27 @@
     [super didReceiveMemoryWarning];
 }
 
--(void)zoomTargetDidLoad:(ZoomTarget *)zoomTarget
+-(void)zoomTargetDidLoad:(ZoomTargetView *)zoomTarget
 {
     NSLog(@"DID LOAD zoomtarget %@",zoomTarget.name);
 }
 
--(void)zoomTargetDidReceiveFocus:(ZoomTarget *)zoomTarget
+-(void)zoomTargetDidReceiveFocus:(ZoomTargetView *)zoomTarget
 {
     NSLog(@"DID ZOOM to %@",zoomTarget.name);
 }
 
--(void)zoomTargetWillReceiveFocus:(ZoomTarget *)zoomTarget
+-(void)zoomTargetWillReceiveFocus:(ZoomTargetView *)zoomTarget
 {
     NSLog(@"WILL ZOOM to %@",zoomTarget.name);
 }
 
--(void)zoomTargetWillLoseFocus:(ZoomTarget*)zoomTarget
+-(void)zoomTargetWillLoseFocus:(ZoomTargetView*)zoomTarget
 {
     NSLog(@"WILL LOSE ZOOM for %@",zoomTarget.name);
 }
 
--(void)zoomTargetDidLoseFocus:(ZoomTarget*)zoomTarget
+-(void)zoomTargetDidLoseFocus:(ZoomTargetView*)zoomTarget
 {
     NSLog(@"DID LOSE ZOOM for %@",zoomTarget.name);
 }
