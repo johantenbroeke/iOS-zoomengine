@@ -15,6 +15,7 @@
 @property (nonatomic,strong) NSMutableDictionary *targets;
 @property (nonatomic,assign) CGAffineTransform zoomedOutTransform;
 @property (nonatomic,strong) NSString *currentZoomTargetName;
+@property (nonatomic,strong) NSString *previousZoomTargetName;
 
 @end
 
@@ -160,6 +161,8 @@
     view.transform = trans;
     view.name = name;
     view.contentViewController = viewController;
+    view.delegate = viewController;
+    [view.delegate zoomTargetDidLoad:view];
     [self addZoomTarget:view];
 }
 
@@ -169,9 +172,15 @@
     if([self.currentZoomTargetName isEqualToString:name]){
         return;
     }
+    if(self.currentZoomTargetName != nil){
+        self.previousZoomTargetName = self.currentZoomTargetName;
+        ZoomTarget *t = (ZoomTarget*)self.targets[self.previousZoomTargetName];
+        [t.delegate zoomTargetWillLoseFocus:t];
+    }
     self.currentZoomTargetName = name;
     [self.delegate zoomView:self willZoomToTargteNamed:name];
     ZoomTarget *t = (ZoomTarget*)self.targets[name];
+    [t.delegate zoomTargetWillReceiveFocus:t];
     if(t != nil){
         CGAffineTransform transform = CGAffineTransformInvert(t.transform);
         [self zoomToTransform:transform];
@@ -208,7 +217,17 @@
         if(self.currentZoomTargetName == nil){
             [self.delegate zoomViewDidZoomToRoot:self];
         }else{
+            
+            if(self.previousZoomTargetName != nil){
+                ZoomTarget *tprev = (ZoomTarget*)self.targets[self.previousZoomTargetName];
+                [tprev.delegate zoomTargetDidLoseFocus:tprev];
+            }
+            
             [self.delegate zoomView:self didZoomToTargteNamed:self.currentZoomTargetName];
+            
+            ZoomTarget *t = (ZoomTarget*)self.targets[self.currentZoomTargetName];
+            [t.delegate zoomTargetDidReceiveFocus:t];
+            
         }
     }];
     [self.layer addAnimation:zoomAnim forKey:nil];

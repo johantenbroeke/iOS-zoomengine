@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZoomTarget.h"
 
-@interface ZoomTargetViewController : UIViewController
+@interface ZoomTargetViewController : UIViewController <ZoomTargetDelegate>
 
 @end
