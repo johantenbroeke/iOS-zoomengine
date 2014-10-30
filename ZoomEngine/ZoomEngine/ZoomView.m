@@ -17,6 +17,8 @@
 @property (nonatomic,strong) NSString *currentZoomTargetName;
 @property (nonatomic,strong) NSString *previousZoomTargetName;
 
+@property (nonatomic,strong) NSMutableArray *targetViewControllers;
+
 @end
 
 @implementation ZoomView
@@ -101,6 +103,8 @@
         [self addGestureRecognizer:r];
         
         self.zoomedOutTransform = self.transform;
+        
+        self.targetViewControllers  = [[NSMutableArray alloc] init];
 
     }
     return self;
@@ -160,10 +164,10 @@
     
     view.transform = trans;
     view.name = name;
-    view.contentViewController = viewController;
     view.delegate = viewController;
     viewController.zoomTargetView = view;
     [view.delegate zoomTargetDidLoad:view];
+    [self.targetViewControllers addObject:viewController];
     [self addZoomTarget:view];
 }
 
@@ -234,6 +238,11 @@
     [self.layer addAnimation:zoomAnim forKey:nil];
     [CATransaction commit];
     self.transform = transform;
+}
+
+-(void)dealloc
+{
+    [self.targetViewControllers removeAllObjects];
 }
 
 @end
