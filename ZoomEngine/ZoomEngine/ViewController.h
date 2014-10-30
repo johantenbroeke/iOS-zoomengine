@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZoomView.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <ZoomViewDelegate>
 
 
 @end

@@ -8,11 +8,13 @@
 
 #import "ZoomView.h"
 #import "ZoomTarget.h"
+#import "ZoomTargetViewController.h"
 
 @interface ZoomView ()
 
-@property (nonatomic,strong) NSMutableArray *targets;
+@property (nonatomic,strong) NSMutableDictionary *targets;
 @property (nonatomic,assign) CGAffineTransform zoomedOutTransform;
+@property (nonatomic,strong) NSString *currentZoomTargetName;
 
 @end
 
@@ -85,7 +87,7 @@
     if(self){
         
         [self setBackgroundColor:[UIColor lightGrayColor]];
-        self.targets = [[NSMutableArray alloc] init];
+        self.targets = [[NSMutableDictionary alloc] init];
         
         if(SHOW_ORIENTATION_MARKER){
             UIView *marker = [[UIView alloc] init];
@@ -125,6 +127,11 @@
 
 -(void)zoomOut:(UITapGestureRecognizer*)r
 {
+    if(self.currentZoomTargetName == nil){
+        return;
+    }
+    self.currentZoomTargetName = nil;
+    [self.delegate zoomViewWillZoomToRoot:self];
     [self zoomToTransform:self.zoomedOutTransform];
 }
 
@@ -135,11 +142,14 @@
              andRotation:(CGFloat)theta
          andXtranslation:(CGFloat)tx
          andYtranslation:(CGFloat)ty
+    andContentViewController:(ZoomTargetViewController*)viewController
 {
     
     ZoomTarget *view = [[ZoomTarget alloc] init];
     [view setBackgroundColor:color];
     view.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
+    
+    [view addSubview:viewController.view];
     
     CGAffineTransform trans = [self makeTransformWithXscale:xScale
                                                       andYScale:yScale
@@ -149,13 +159,29 @@
     
     view.transform = trans;
     view.name = name;
+    view.contentViewController = viewController;
     [self addZoomTarget:view];
+}
+
+
+-(void)zoomToTargetWithName:(NSString*)name
+{
+    if([self.currentZoomTargetName isEqualToString:name]){
+        return;
+    }
+    self.currentZoomTargetName = name;
+    [self.delegate zoomView:self willZoomToTargteNamed:name];
+    ZoomTarget *t = (ZoomTarget*)self.targets[name];
+    if(t != nil){
+        CGAffineTransform transform = CGAffineTransformInvert(t.transform);
+        [self zoomToTransform:transform];
+    }
 }
 
 
 -(void)addZoomTarget:(ZoomTarget*)view
 {
-    [self.targets addObject:view];
+    self.targets[view.name] = view;
     [self addSubview:view];
     UITapGestureRecognizer *r = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
     [view addGestureRecognizer:r];
@@ -164,8 +190,7 @@
 -(void)tapped:(UITapGestureRecognizer*)r
 {
     ZoomTarget *t = (ZoomTarget*)r.view;
-    CGAffineTransform transform = CGAffineTransformInvert(t.transform);
-    [self zoomToTransform:transform];
+    [self zoomToTargetWithName:t.name];
 }
 
 -(void)zoomToTransform:(CGAffineTransform)transform
@@ -179,6 +204,11 @@
     [CATransaction setCompletionBlock:^{
         if(LOG_ZOOM_PROPERTIES){
             [self logZoomProperties];
+        }
+        if(self.currentZoomTargetName == nil){
+            [self.delegate zoomViewDidZoomToRoot:self];
+        }else{
+            [self.delegate zoomView:self didZoomToTargteNamed:self.currentZoomTargetName];
         }
     }];
     [self.layer addAnimation:zoomAnim forKey:nil];

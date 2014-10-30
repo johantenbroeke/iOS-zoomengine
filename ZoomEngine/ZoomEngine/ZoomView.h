@@ -12,7 +12,22 @@
 
 #import <UIKit/UIKit.h>
 
+@class ZoomTargetViewController;
+@class ZoomView;
+
+@protocol ZoomViewDelegate
+
+-(void)zoomView:(ZoomView*)zoomView willZoomToTargteNamed:(NSString*)name;
+-(void)zoomView:(ZoomView*)zoomView didZoomToTargteNamed:(NSString*)name;
+
+-(void)zoomViewWillZoomToRoot:(ZoomView*)zoomView;
+-(void)zoomViewDidZoomToRoot:(ZoomView*)zoomView;
+
+@end
+
 @interface ZoomView : UIView
+
+@property (nonatomic,weak) id <ZoomViewDelegate> delegate;
 
 -(void)addZoomTargetWithName:(NSString*)name
                     andColor:(UIColor*)color
@@ -20,6 +35,9 @@
                    andYScale:(CGFloat)yScale
                  andRotation:(CGFloat)theta
              andXtranslation:(CGFloat)tx
-             andYtranslation:(CGFloat)ty;
+             andYtranslation:(CGFloat)ty
+    andContentViewController:(ZoomTargetViewController*)viewController;
+
+-(void)zoomToTargetWithName:(NSString*)name;
 
 @end

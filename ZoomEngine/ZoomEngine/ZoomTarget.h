@@ -11,5 +11,6 @@
 @interface ZoomTarget : UIView
 
 @property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) UIViewController *contentViewController;
 
 @end
