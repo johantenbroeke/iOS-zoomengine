@@ -24,7 +24,7 @@
     [super viewDidLoad];
     
     ZoomView *v = [[ZoomView alloc] init];
-    self.ZoomView = v;
+    self.zoomView = v;
     self.zoomView.delegate = self;
     v.frame = CGRectMake(0, 0, 400, 400);
     v.center = self.view.center;
