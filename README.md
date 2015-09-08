@@ -1,4 +1,4 @@
 iOS-zoomengine
 ==============
 
-zoom engine for iOS
+Experimental zoom engine for iOS
